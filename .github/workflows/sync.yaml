@@ -50,10 +50,13 @@ jobs:
           name: output
           path: build/
           retention-days: 7
-      - name: Sync
-        uses: JamesIves/github-pages-deploy-action@v4
+      - uses: cpina/github-action-push-to-another-repository@v1
+        env:
+          API_TOKEN_GITHUB: ${{ secrets.GH_PAT }}
         with:
-          folder: build
-          token: ${{ secrets.GH_PAT }}
-          repository-name: JunchengXue/tidy3d
-          branch: develop
+          source-directory: 'build'
+          destination-github-username: 'bot'
+          destination-repository-name: JunchengXue/tidy3d
+          user-email: bot@flexcompute.com
+          target-branch: develop
+          target-directory: docs/build
