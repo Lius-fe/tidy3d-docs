@@ -22,18 +22,21 @@ jobs:
           if test -n "${{ github.event.inputs.env }}"
           then
             echo "::set-output name=env::${{ github.event.inputs.env }}"
+            echo "ENV=${{ github.event.inputs.env }}" >> $GITHUB_ENV
           fi
           if test "${{ github.event_name }}" = 'push' -a "${{ github.ref }}" = 'refs/heads/develop'
           then
             echo "::set-output name=env::dev"
+            echo "ENV=dev" >> $GITHUB_ENV
           fi
           if test "${{ github.event_name }}" = 'push' -a "${{ github.ref }}" = 'refs/heads/main'
           then
             echo "::set-output name=env::prod"
+            echo "ENV=prod" >> $GITHUB_ENV
           fi
       - id: dest-branch
         run: |
-          case ${{ setenv.outputs.env }} in
+          case ${{ env.ENV }} in
             dev)
             echo "::set-output name=branch::develop"
             ;;
