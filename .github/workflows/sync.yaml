@@ -56,4 +56,4 @@ jobs:
           folder: build
           token: ${{ secrets.GH_PAT }}
           repository-name: JunchengXue/tidy3d
-          single-commit: true
+          branch: develop
