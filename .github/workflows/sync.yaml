@@ -60,12 +60,6 @@ jobs:
           cache: 'pip'
       - run: pip install notebook
       - run: jupyter nbconvert --output-dir='build' --to html docs/source/notebooks/*.ipynb --no-prompt
-      - run: ls -la build
-      - uses: actions/upload-artifact@v3
-        with:
-          name: output
-          path: build/
-          retention-days: 7
       - uses: cpina/github-action-push-to-another-repository@cbe757f8d8b380dd2b3ceec5a80fbcd61f1f3107 #1.7
         env:
           API_TOKEN_GITHUB: ${{ secrets.GH_PAT }}
@@ -77,3 +71,8 @@ jobs:
           user-email: bot@flexcompute.com
           target-branch: ${{ needs.set_env.outputs.dest-branch }}
           target-directory: examples/notebooks
+      - uses: actions/upload-artifact@v3
+        with:
+          name: output
+          path: build/
+          retention-days: 7
