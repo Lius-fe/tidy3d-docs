@@ -44,4 +44,4 @@ jobs:
         with:
           python-version: '3.10' 
       - run: pip install notebook
-      - run: jupyter nbconvert --output-dir='.' --to script source/notebooks/StartHere.ipynb --no-prompt
+      - run: jupyter nbconvert --output-dir='.' --to script docs/source/notebooks/StartHere.ipynb --no-prompt
