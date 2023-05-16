@@ -59,4 +59,4 @@ jobs:
           destination-repository-name: tidy3d
           user-email: bot@flexcompute.com
           target-branch: develop
-          target-directory: docs/build
+          target-directory: img
