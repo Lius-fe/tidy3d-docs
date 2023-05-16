@@ -71,8 +71,8 @@ jobs:
           API_TOKEN_GITHUB: ${{ secrets.GH_PAT }}
         with:
           source-directory: 'build'
-          destination-github-username: JunchengXue
-          destination-repository-name: tidy3d
+          destination-github-username: cmsflexc
+          destination-repository-name: flexcompute.com
           user-name: bot
           user-email: bot@flexcompute.com
           target-branch: ${{ needs.set_env.outputs.dest-branch }}
