@@ -50,7 +50,7 @@ jobs:
           name: output
           path: build/
           retention-days: 7
-      - uses: JunchengXue/github-action-push-to-another-repository@4fd75c4d050b755cd008d2050d419bbb23a005af
+      - uses: cpina/github-action-push-to-another-repository@cbe757f8d8b380dd2b3ceec5a80fbcd61f1f3107 #1.7
         env:
           API_TOKEN_GITHUB: ${{ secrets.GH_PAT }}
         with:
@@ -59,4 +59,4 @@ jobs:
           destination-repository-name: tidy3d
           user-email: bot@flexcompute.com
           target-branch: develop
-          target-directory: img/build
+          target-directory: img/html
