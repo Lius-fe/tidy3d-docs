@@ -14,6 +14,7 @@ jobs:
   set_env:
     outputs:
       env: ${{ steps.setenv.outputs.env }}
+      dest-branch: ${{ steps.dest-branch.outputs.branch }}
     runs-on: ubuntu-latest
     steps:
       - id: setenv
@@ -30,6 +31,16 @@ jobs:
           then
             echo "::set-output name=env::prod"
           fi
+      - id: dest-branch
+        run: |
+          case ${{ setenv.outputs.env }} in
+            dev)
+            echo "::set-output name=branch::develop"
+            ;;
+            prod)
+            echo "::set-output name=branch::main"
+            ;;
+          esac
   build-and-deploy:
     needs: set_env
     runs-on: ubuntu-latest
@@ -37,7 +48,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
       - name: echo environment
-        run: echo "::notice ::GIT_BRANCH:${{needs.set_env.outputs.env}}"
+        run: |
+          echo "::notice ::env:${{needs.set_env.outputs.env}}"
+          echo "::notice ::dest-branch:${{needs.set_env.outputs.dest-branch}}"
       - uses: actions/setup-python@v4
         with:
           python-version: '3.10'
@@ -59,5 +72,5 @@ jobs:
           destination-repository-name: tidy3d
           user-name: bot
           user-email: bot@flexcompute.com
-          target-branch: develop
+          target-branch: ${{ needs.set_env.outputs.dest-branch }}
           target-directory: img/html
