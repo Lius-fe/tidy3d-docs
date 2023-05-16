@@ -57,6 +57,7 @@ jobs:
           source-directory: 'build'
           destination-github-username: JunchengXue
           destination-repository-name: tidy3d
+          user-name: bot
           user-email: bot@flexcompute.com
           target-branch: develop
           target-directory: img/html
