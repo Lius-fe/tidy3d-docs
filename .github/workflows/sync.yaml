@@ -50,7 +50,7 @@ jobs:
           name: output
           path: build/
           retention-days: 7
-      - uses: cpina/github-action-push-to-another-repository@0a14457bb28b04dfa1652e0ffdfda866d2845c73 # v1.6
+      - uses: JunchengXue/github-action-push-to-another-repository@main
         env:
           API_TOKEN_GITHUB: ${{ secrets.GH_PAT }}
         with:
