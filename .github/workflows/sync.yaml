@@ -58,15 +58,21 @@ jobs:
         with:
           python-version: '3.10'
           cache: 'pip'
-      - run: pip install notebook
-      - run: jupyter nbconvert --output-dir='build' --to html docs/source/notebooks/*.ipynb --no-prompt
+      - run: pip install -r docs/requirements.txt
+      - run: sphinx-build -b html source _build
+      - run: |
+          mkdir -p build
+          cp -r build/notebooks build/
+          cp -r build/_static build/
+          cp -r build/_images build/
+          cp -r build/_autosummary build/
       - uses: cpina/github-action-push-to-another-repository@cbe757f8d8b380dd2b3ceec5a80fbcd61f1f3107 #1.7
         env:
           API_TOKEN_GITHUB: ${{ secrets.GH_PAT }}
         with:
           source-directory: 'build'
-          destination-github-username: cmsflexc
-          destination-repository-name: flexcompute.com
+          destination-github-username: JunchengXue
+          destination-repository-name: tidy3d
           user-name: bot
           user-email: bot@flexcompute.com
           target-branch: ${{ needs.set_env.outputs.dest-branch }}
