@@ -58,7 +58,7 @@ jobs:
         with:
           python-version: '3.10'
           cache: 'pip'
-      - run: cd ${{ github.workspace }}/docs && pip install -r docs/requirements.txt
+      - run: cd ${{ github.workspace }}/docs && pip install -r requirements.txt
       - run: cd ${{ github.workspace }}/docs && sphinx-build -b html source _build
       - run: |
           cd ${{ github.workspace }}/docs
