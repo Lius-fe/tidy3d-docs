@@ -80,7 +80,7 @@ jobs:
           user-name: bot
           user-email: bot@flexcompute.com
           target-branch: ${{ needs.set_env.outputs.dest-branch }}
-          target-directory: examples/notebooks
+          target-directory: tidy3d/examples/html
       - uses: actions/upload-artifact@v3
         with:
           name: output
