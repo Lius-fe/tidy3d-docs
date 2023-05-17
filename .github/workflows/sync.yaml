@@ -50,6 +50,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+        with:
+          submodules: recursive
       - name: echo environment
         run: |
           echo "::notice ::env:${{needs.set_env.outputs.env}}"
