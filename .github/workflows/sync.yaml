@@ -58,9 +58,10 @@ jobs:
         with:
           python-version: '3.10'
           cache: 'pip'
-      - run: pip install -r docs/requirements.txt
-      - run: sphinx-build -b html source _build
+      - run: cd ${{ github.workspace }}/tidy3d-docs/docs && pip install -r docs/requirements.txt
+      - run: cd ${{ github.workspace }}/tidy3d-docs/docs && sphinx-build -b html source _build
       - run: |
+          cd ${{ github.workspace }}/tidy3d-docs/docs
           mkdir -p build
           cp -r build/notebooks build/
           cp -r build/_static build/
