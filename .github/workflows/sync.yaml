@@ -63,10 +63,10 @@ jobs:
       - run: |
           cd ${{ github.workspace }}/docs
           mkdir -p build
-          cp -r build/notebooks build/
-          cp -r build/_static build/
-          cp -r build/_images build/
-          cp -r build/_autosummary build/
+          cp -r _build/notebooks build/
+          cp -r _build/_static build/
+          cp -r _build/_images build/
+          cp -r _build/_autosummary build/
       - uses: cpina/github-action-push-to-another-repository@cbe757f8d8b380dd2b3ceec5a80fbcd61f1f3107 #1.7
         env:
           API_TOKEN_GITHUB: ${{ secrets.GH_PAT }}
