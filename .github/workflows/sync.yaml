@@ -74,7 +74,7 @@ jobs:
         env:
           API_TOKEN_GITHUB: ${{ secrets.GH_PAT }}
         with:
-          source-directory: 'build'
+          source-directory: 'docs/build'
           destination-github-username: JunchengXue
           destination-repository-name: tidy3d
           user-name: bot
