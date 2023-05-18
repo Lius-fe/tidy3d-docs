@@ -72,13 +72,13 @@ jobs:
         env:
           API_TOKEN_GITHUB: ${{ secrets.GH_PAT }}
         with:
-          source-directory: 'docs/build'
+          source-directory: 'build'
           destination-github-username: JunchengXue
           destination-repository-name: tidy3d
           user-name: bot
           user-email: bot@flexcompute.com
           target-branch: ${{ needs.set_env.outputs.dest-branch }}
-          target-directory: tidy3d/examples/html
+          target-directory: tidy3d/examples/notebooks
       - uses: actions/upload-artifact@v3
         with:
           name: output
