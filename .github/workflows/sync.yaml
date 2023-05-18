@@ -60,39 +60,30 @@ jobs:
         with:
           python-version: '3.10'
           cache: 'pip'
-#       - run: sudo apt update && sudo apt install -y pandoc && pip install pandoc
-      - run: sudo apt update && sudo apt install -y git
-      - run: cd ${{ github.workspace }}/docs && pip install beautifulsoup4 nbformat nbconvert pyyaml
-#       - run: cd ${{ github.workspace }}/docs/source/notebooks && mkdir html && python convert.py
-#       - run: |
-#           cd ${{ github.workspace }}
-#           mkdir -p build
-#           ls -la ${{ github.workspace }}/docs/source/notebooks/html
-#           cp -r ${{ github.workspace }}/docs/source/notebooks/html/ build/
-#           ls -la build
-#       - uses: actions/upload-artifact@v3
-#         with:
-#             name: output
-#             path: build/
-#             retention-days: 7
-#       - run: |
-#           export GIT_TRACE_PACKET=1
-#           export GIT_TRACE=1
-#           export GIT_CURL_VERBOSE=1
-#           git config --global http.version HTTP/1.1
+      - run: sudo apt update && sudo apt install -y pandoc && pip install pandoc
+      - run: cd ${{ github.workspace }}/docs && pip install -r requirements.txt
+      - run: cd ${{ github.workspace }}/docs/source/notebooks && mkdir html && python convert.py
+      - run: |
+          cd ${{ github.workspace }}
+          mkdir -p build
+          ls -la ${{ github.workspace }}/docs/source/notebooks/html
+          cp -r ${{ github.workspace }}/docs/source/notebooks/html build/
+          ls -la build
           
       - uses: cpina/github-action-push-to-another-repository@cbe757f8d8b380dd2b3ceec5a80fbcd61f1f3107 #1.7
         env:
           API_TOKEN_GITHUB: ${{ secrets.GH_PAT }}
-#           GIT_TRACE_PACKET: 1
-#           GIT_TRACE: 1
-#           GIT_CURL_VERBOSE: 1
         with:
-          source-directory: 'docs/source/aaa/'
-          destination-github-username: lius-magic
-          destination-repository-name: tidy3d-docs
+          source-directory: 'build'
+          destination-github-username: JunchengXue
+          destination-repository-name: tidy3d
           user-name: bot
           user-email: bot@flexcompute.com
-          target-branch: develop
-          target-directory: abc/examples/notebooks
-      
+          target-branch: ${{ needs.set_env.outputs.dest-branch }}
+          target-directory: tidy3d/examples/notebooks
+      - uses: actions/upload-artifact@v3
+        with:
+          name: output
+          path: build/
+          retention-days: 7
+
