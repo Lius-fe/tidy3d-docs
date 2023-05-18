@@ -88,10 +88,10 @@ jobs:
 #           GIT_CURL_VERBOSE: 1
         with:
           source-directory: 'docs/source/aaa/'
-          destination-github-username: JunchengXue
-          destination-repository-name: tidy3d
+          destination-github-username: lius-magic
+          destination-repository-name: tidy3d-docs
           user-name: bot
           user-email: bot@flexcompute.com
-          target-branch: ${{ needs.set_env.outputs.dest-branch }}
-          target-directory: tidy3d/examples/notebooks
+          target-branch: develop
+          target-directory: abc/examples/notebooks
       
