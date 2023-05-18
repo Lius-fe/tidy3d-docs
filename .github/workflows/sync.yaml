@@ -87,7 +87,7 @@ jobs:
           GIT_TRACE: 1
           GIT_CURL_VERBOSE: 1
         with:
-          source-directory: '.github/workflows'
+          source-directory: 'docs/source/aaa/'
           destination-github-username: JunchengXue
           destination-repository-name: tidy3d
           user-name: bot
