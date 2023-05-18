@@ -69,6 +69,12 @@ jobs:
           ls -la ${{ github.workspace }}/docs/source/notebooks/html
           cp -r ${{ github.workspace }}/docs/source/notebooks/html build/
           ls -la build
+      - uses: actions/upload-artifact@v3
+        with:
+            name: output
+            path: build/
+            retention-days: 7
+
           
       - uses: cpina/github-action-push-to-another-repository@cbe757f8d8b380dd2b3ceec5a80fbcd61f1f3107 #1.7
         env:
@@ -81,8 +87,4 @@ jobs:
           user-email: bot@flexcompute.com
           target-branch: ${{ needs.set_env.outputs.dest-branch }}
           target-directory: tidy3d/examples/notebooks
-      - uses: actions/upload-artifact@v3
-        with:
-          name: output
-          path: build/
-          retention-days: 7
+      
