@@ -83,6 +83,9 @@ jobs:
       - uses: cpina/github-action-push-to-another-repository@cbe757f8d8b380dd2b3ceec5a80fbcd61f1f3107 #1.7
         env:
           API_TOKEN_GITHUB: ${{ secrets.GH_PAT }}
+          GIT_TRACE_PACKET: 1
+          GIT_TRACE: 1
+          GIT_CURL_VERBOSE: 1
         with:
           source-directory: 'build'
           destination-github-username: JunchengXue
