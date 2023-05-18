@@ -62,10 +62,11 @@ jobs:
           cache: 'pip'
       - run: sudo apt update && sudo apt install -y pandoc && pip install pandoc
       - run: cd ${{ github.workspace }}/docs && pip install -r requirements.txt
-      - run: cd ${{ github.workspace }}/docs/source/notebooks && mkdir html &&python convert.py
+      - run: cd ${{ github.workspace }}/docs/source/notebooks && mkdir html && python convert.py
       - run: |
           cd ${{ github.workspace }}
           mkdir -p build
+          ls -la ${{ github.workspace }}/docs/source/notebooks/html
           cp -r ${{ github.workspace }}/docs/source/notebooks/html build/
           ls -la build
           
