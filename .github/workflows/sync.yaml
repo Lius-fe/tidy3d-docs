@@ -61,7 +61,7 @@ jobs:
           python-version: '3.10'
           cache: 'pip'
 #       - run: sudo apt update && sudo apt install -y pandoc && pip install pandoc
-      - run: cd ${{ github.workspace }}/docs && pip install beautifulsoup4 nbformat nbconvert yaml
+      - run: cd ${{ github.workspace }}/docs && pip install beautifulsoup4 nbformat nbconvert pyyaml
       - run: cd ${{ github.workspace }}/docs/source/notebooks && mkdir html && python convert.py
       - run: |
           cd ${{ github.workspace }}
