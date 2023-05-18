@@ -1,4 +1,4 @@
-from subprocess import run
+from subprocess import run, CalledProcessError
 from bs4 import BeautifulSoup
 import nbformat
 import yaml
@@ -88,7 +88,7 @@ def write_template(meta, input_file):
         # for dom in prompts:
         #     dom = re.sub(r'In [','[',str(dom),flags=re.DOTALL)
         # print(len(prompt))
-        
+
         template_soup = read_template()
         insert_location = template_soup.find('main', {'id': 'notebook-container'})
 
@@ -112,42 +112,43 @@ for input_file in ipynb_files:
         # 打印加粗的文本
         print(f'\033[1m [Converting] : {input_file}\033[0m')
 
-        # 构建 nbconvert 命令字符串
-        cmd = f"jupyter nbconvert --to html --output-dir {output_dir} {input_file} --embed-images"
+        try:
+            # 构建 nbconvert 命令字符串
+            cmd = f"jupyter nbconvert --to htmls --output-dir {output_dir} {input_file} --embed-images"
 
-        # 执行命令，并捕获输出和错误
-        result = run(cmd, shell=True, capture_output=True, text=True)
+            # 执行命令，并捕获输出和错误
+            result = run(cmd, shell=True, capture_output=True, text=True, check=True)
 
-        # 检查命令是否成功完成
-        if result.returncode == 0:
-            # 定义匹配一级标题的正则表达式
-            with open(input_file, 'r', encoding='utf-8') as f:
-                nb = nbformat.read(f, as_version=4)
-                default_title = ""
-                for cell in nb.cells:
-                    if cell.cell_type == 'markdown' and cell.source.startswith('#'):
-                        _title = cell.source.strip('#').strip()
-                        default_title = _title.split("\n")[0]
-                        break
-                html_exporter = HTMLExporter()
-                # Modify the HTML title tag to use the notebook's metadata
-                metadata = nb['metadata']
-                title = metadata.get('title', default_title)
-                description = metadata.get('description', '')
-                keywords = metadata.get('keywords', '')
-                dict = {}
-                if title:
-                    dict['title'] = title
-                if description:
-                    dict['description'] = description['content']
-                if keywords:
-                    dict['keywords'] = keywords['content']
-                write_template(dict, os.path.splitext(os.path.basename(input_file))[0]+'.html')
-                index = 1
-                
-        else:
-            print("Failed to convert notebook to HTML.")
-        
-        
+            # 检查命令是否成功完成
+            if result.returncode == 0:
+                # 定义匹配一级标题的正则表达式
+                with open(input_file, 'r', encoding='utf-8') as f:
+                    nb = nbformat.read(f, as_version=4)
+                    default_title = ""
+                    for cell in nb.cells:
+                        if cell.cell_type == 'markdown' and cell.source.startswith('#'):
+                            _title = cell.source.strip('#').strip()
+                            default_title = _title.split("\n")[0]
+                            break
+                    html_exporter = HTMLExporter()
+                    # Modify the HTML title tag to use the notebook's metadata
+                    metadata = nb['metadata']
+                    title = metadata.get('title', default_title)
+                    description = metadata.get('description', '')
+                    keywords = metadata.get('keywords', '')
+                    dict = {}
+                    if title:
+                        dict['title'] = title
+                    if description:
+                        dict['description'] = description
+                    if keywords:
+                        dict['keywords'] = keywords
+                    write_template(dict, os.path.splitext(os.path.basename(input_file))[0]+'.html')
+                    index = 1
 
-        
+            else:
+                print("Failed to convert notebook to HTML.")
+        except CalledProcessError as e:
+            # 捕获异常并打印错误信息
+            print(f"Command '{e.cmd}' returned non-zero exit status {e.returncode}: {e.stderr}")
+            break
