@@ -114,7 +114,7 @@ for input_file in ipynb_files:
 
         try:
             # 构建 nbconvert 命令字符串
-            cmd = f"jupyter nbconvert --to htmls --output-dir {output_dir} {input_file} --embed-images"
+            cmd = f"jupyter nbconvert --to html --output-dir {output_dir} {input_file} --embed-images"
 
             # 执行命令，并捕获输出和错误
             result = run(cmd, shell=True, capture_output=True, text=True, check=True)
