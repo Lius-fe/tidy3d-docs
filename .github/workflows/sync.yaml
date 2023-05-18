@@ -67,9 +67,8 @@ jobs:
           cd ${{ github.workspace }}
           mkdir -p build
           ls -la ${{ github.workspace }}/docs/source/notebooks/html
-          cp -r ${{ github.workspace }}/docs/source/notebooks/html build/
+          cp -r ${{ github.workspace }}/docs/source/notebooks/html/ build/
           ls -la build
-          du -sh build/html/*
       - uses: actions/upload-artifact@v3
         with:
             name: output
