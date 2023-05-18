@@ -75,7 +75,10 @@ jobs:
             name: output
             path: build/
             retention-days: 7
-
+      - run: |
+          export GIT_TRACE_PACKET=1
+          export GIT_TRACE=1
+          export GIT_CURL_VERBOSE=1
           
       - uses: cpina/github-action-push-to-another-repository@cbe757f8d8b380dd2b3ceec5a80fbcd61f1f3107 #1.7
         env:
