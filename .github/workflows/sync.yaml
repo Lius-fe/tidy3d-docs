@@ -62,14 +62,12 @@ jobs:
           cache: 'pip'
       - run: sudo apt update && sudo apt install -y pandoc && pip install pandoc
       - run: cd ${{ github.workspace }}/docs && pip install -r requirements.txt
-      - run: cd ${{ github.workspace }}/docs && sphinx-build -b html source _build
+      - run: cd ${{ github.workspace }}/docs/source/notebooks && mkdir html &&python convert.py
       - run: |
-          cd ${{ github.workspace }}/docs
+          cd ${{ github.workspace }}
           mkdir -p build
-          cp -r _build/notebooks build/
-          cp -r _build/_static build/
-          cp -r _build/_images build/
-          cp -r _build/_autosummary build/
+          cp -r ${{ github.workspace }}/docs/source/notebooks/html build/
+          
       - uses: cpina/github-action-push-to-another-repository@cbe757f8d8b380dd2b3ceec5a80fbcd61f1f3107 #1.7
         env:
           API_TOKEN_GITHUB: ${{ secrets.GH_PAT }}
