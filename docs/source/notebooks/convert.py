@@ -22,6 +22,8 @@ def creat_yaml(meta, anchor={}):
         data['description'] = meta['description']
     if 'keywords' in meta:
         data['tags'] = meta['keywords'].split(",")
+    if 'page_title' in meta:
+        data['page_title'] = meta['page_title']
 
     # 将字典转换为 YAML 格式
     return '---\n' + yaml.dump(data) + yaml.dump(anchor) + '---\n'
@@ -136,7 +138,9 @@ for input_file in ipynb_files:
                     title = metadata.get('title', default_title)
                     description = metadata.get('description', '')
                     keywords = metadata.get('keywords', '')
-                    dict = {}
+                    dict = {
+                        "page_title": default_title
+                    }
                     if title:
                         dict['title'] = title
                     if description:
