@@ -67,7 +67,6 @@ jobs:
           mkdir -p build
           ls -la ${{ github.workspace }}/docs/source/notebooks/html
           cp -r ${{ github.workspace }}/docs/source/notebooks/html/* build/
-          cp ${{ github.workspace }}/docs/source/notebooks/html/
           ls -la build
       - uses: JamesIves/github-pages-deploy-action@v4
         with:
