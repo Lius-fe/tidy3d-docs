@@ -9,6 +9,7 @@ import shutil
 from nbconvert import HTMLExporter
 
 output_dir = './html'
+css_file_name = "example-notebook.css"
 
 def creat_yaml(meta, anchor={}):
     data = {
@@ -24,7 +25,6 @@ def creat_yaml(meta, anchor={}):
         data['tags'] = [tag.strip() for tag in meta['keywords'].split(",")]
     if 'page_title' in meta:
         data['page_title'] = meta['page_title']
-
     # 将字典转换为 YAML 格式
     return '---\n' + yaml.dump(data) + yaml.dump(anchor) + '---\n'
 
@@ -64,13 +64,28 @@ def get_anchor_list(soup):
             anchor_dict['anchor_area']['list'].append(dict)
     return anchor_dict
 
-def write_template(meta, input_file):
-    with open(f'{output_dir}/{input_file}', 'r') as html_file:
+def write_css_file(style_tags, output_dir):
+    css_content = ""
+    for style_tag in style_tags:
+        css_content += style_tag.string
+
+    if not os.path.exists(output_dir):
+        os.makedirs(output_dir)
+
+    # 将样式内容写入 CSS 文件
+    with open(output_dir+css_file_name, "w+") as f:
+        f.write(css_content)
+
+def write_template(meta, file_name, create_css=False):
+    html_output_file = f'{output_dir}/{file_name}.html'
+    css_output_directory = f'{output_dir}/css/'
+    with open(html_output_file, 'r') as html_file:
         content = html_file.read()
 
         # Parse the HTML content using BeautifulSoup
         soup = BeautifulSoup(content, 'html.parser')
-        anchor = get_anchor_list(soup)
+        # anchor = get_anchor_list(soup)
+        style_tags = soup.find_all('style')
         for tag in soup.find_all('style'):
             tag.string = re.sub(r'body\s*{\s*(.*?)\s*}', '', tag.string, flags=re.DOTALL)
             tag.string = re.sub(r'html\s*{\s*(.*?)\s*}', '', tag.string, flags=re.DOTALL)
@@ -82,14 +97,26 @@ def write_template(meta, input_file):
             tag.string = re.sub(r'\*\:\:before\,', '', tag.string, flags=re.DOTALL)
             # 删除 *::after 样式
             tag.string = re.sub(r'\*\s*::after\s*{\s*(.*?)\s*}', '', tag.string, flags=re.DOTALL)
+        if create_css:
+            write_css_file(style_tags, css_output_directory)
+
+        # css_file_name = file_name+'.css'
+        css_output_file = "" + css_output_directory + css_file_name
+        if os.path.exists(css_output_file) and os.path.isfile(css_output_file):
+            # 创建 link 标签
+            link_tag = soup.new_tag("link")
+            link_tag['rel'] = 'stylesheet'
+            link_tag['href'] = f'/assets/tidy3d/examples/css/{css_file_name}'
+
+            head_tag = soup.head
+            head_tag.insert(4, link_tag)
+
+            for tag in soup.find_all('style'):
+                tag.extract()
 
         for script in soup.head.find_all('script'):
             if 'require.min.js' in str(script):
                 script.decompose()
-        # prompts = soup.find_all('div', class_='jp-InputPrompt jp-InputArea-prompt')
-        # for dom in prompts:
-        #     dom = re.sub(r'In [','[',str(dom),flags=re.DOTALL)
-        # print(len(prompt))
 
         template_soup = read_template()
         insert_location = template_soup.find('main', {'id': 'notebook-container'})
@@ -98,8 +125,8 @@ def write_template(meta, input_file):
 
         ouptut_html = str(template_soup)
         ouptut_html = ouptut_html.replace('In [','[')
-        yam_str = creat_yaml(meta,anchor)
-        with open(f'{output_dir}/{input_file}', 'w') as output_file:
+        yam_str = creat_yaml(meta)
+        with open(html_output_file, 'w') as output_file:
             output_file.write(yam_str + str(ouptut_html))
 
 # 获取当前目录下的所有 ipynb 文件
@@ -107,7 +134,7 @@ ipynb_files = glob.glob("*.ipynb")
 shutil.rmtree(output_dir)
 
 os.mkdir(output_dir)
-# index = 0
+index = 0
 # 遍历每个 ipynb 文件并读取内容
 for input_file in ipynb_files:
     if input_file.endswith('.ipynb'):
@@ -147,8 +174,8 @@ for input_file in ipynb_files:
                         dict['description'] = description
                     if keywords:
                         dict['keywords'] = keywords
-                    write_template(dict, os.path.splitext(os.path.basename(input_file))[0]+'.html')
-                    index = 1
+                    write_template(dict, os.path.splitext(os.path.basename(input_file))[0], index == 0)
+                    index += 1
 
             else:
                 print("Failed to convert notebook to HTML.")
