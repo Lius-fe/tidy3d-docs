@@ -65,8 +65,11 @@ jobs:
       - run: |
           cd ${{ github.workspace }}
           mkdir -p build
+          mkdir -p build-css
           ls -la ${{ github.workspace }}/docs/source/notebooks/html
           cp -r ${{ github.workspace }}/docs/source/notebooks/html/* build/
+          cp -r build/css/* build-css
+          rm -rf build/css
           ls -la build
       - uses: JamesIves/github-pages-deploy-action@v4
         with:
@@ -77,7 +80,7 @@ jobs:
           branch: ${{ needs.set_env.outputs.dest-branch }}
       - uses: JamesIves/github-pages-deploy-action@v4
         with:
-          folder: build/css
+          folder: build-css
           token: ${{ secrets.GH_PAT }}
           repository-name: cmsflexc/flexcompute.com
           target-folder: /assets/tidy3d/examples/css
