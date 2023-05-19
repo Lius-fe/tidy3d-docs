@@ -21,7 +21,7 @@ def creat_yaml(meta, anchor={}):
     if 'description' in meta:
         data['description'] = meta['description']
     if 'keywords' in meta:
-        data['tags'] = meta['keywords'].split(",")
+        data['tags'] = [tag.strip() for tag in meta['keywords'].split(",")]
     if 'page_title' in meta:
         data['page_title'] = meta['page_title']
 
