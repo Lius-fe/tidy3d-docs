@@ -67,6 +67,7 @@ jobs:
           mkdir -p build
           ls -la ${{ github.workspace }}/docs/source/notebooks/html
           cp -r ${{ github.workspace }}/docs/source/notebooks/html/* build/
+          cp ${{ github.workspace }}/docs/source/notebooks/html/
           ls -la build
       - uses: JamesIves/github-pages-deploy-action@v4
         with:
@@ -74,6 +75,13 @@ jobs:
           token: ${{ secrets.GH_PAT }}
           repository-name: cmsflexc/flexcompute.com
           target-folder: tidy3d/examples/notebooks
+          branch: ${{ needs.set_env.outputs.dest-branch }}
+      - uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: build/css
+          token: ${{ secrets.GH_PAT }}
+          repository-name: cmsflexc/flexcompute.com
+          target-folder: /assets/tidy3d/examples/css
           branch: ${{ needs.set_env.outputs.dest-branch }}
       - uses: actions/upload-artifact@v3
         with:
