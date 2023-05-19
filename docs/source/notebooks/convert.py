@@ -26,7 +26,11 @@ def creat_yaml(meta, anchor={}):
     if 'page_title' in meta:
         data['page_title'] = meta['page_title']
     # 将字典转换为 YAML 格式
-    return '---\n' + yaml.dump(data) + yaml.dump(anchor) + '---\n'
+    anchor_str = ""
+    if anchor:
+        anchor_str = yaml.dump(anchor)
+
+    return '---\n' + yaml.dump(data) + anchor_str + '---\n'
 
 def read_template():
     # 读取 HTML 文件
