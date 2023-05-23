@@ -65,10 +65,7 @@ jobs:
       - shell: bash
         run: |
           cd ${{ github.workspace }}
-          mkdir -p build
-          mkdir -p build-css
-          ls -la ${{ github.workspace }}/docs/source/notebooks/html
-          cp -r ${{ github.workspace }}/docs/source/notebooks/html/* build/
+          mkdir -p build && rsync -r ${{ github.workspace }}/docs/source/notebooks/html/ build
           mkdir -p build/css && rsync -r build/css/ build-css
           mkdir -p build/image && rsync -r build/image/ build-image
           rm -rf build/css
