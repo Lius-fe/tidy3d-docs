@@ -69,7 +69,9 @@ jobs:
           ls -la ${{ github.workspace }}/docs/source/notebooks/html
           cp -r ${{ github.workspace }}/docs/source/notebooks/html/* build/
           cp -r build/css/* build-css
+          cp -r build/image/* build-image
           rm -rf build/css
+          rm -rf build/image
           ls -la build
       - uses: JamesIves/github-pages-deploy-action@v4
         with:
@@ -84,6 +86,13 @@ jobs:
           token: ${{ secrets.GH_PAT }}
           repository-name: cmsflexc/flexcompute.com
           target-folder: /assets/tidy3d/examples/css
+          branch: ${{ needs.set_env.outputs.dest-branch }}
+      - uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: build-image
+          token: ${{ secrets.GH_PAT }}
+          repository-name: cmsflexc/flexcompute.com
+          target-folder: /assets/tidy3d/examples/image
           branch: ${{ needs.set_env.outputs.dest-branch }}
       - uses: actions/upload-artifact@v3
         with:
