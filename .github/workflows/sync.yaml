@@ -68,8 +68,8 @@ jobs:
           mkdir -p build-css
           ls -la ${{ github.workspace }}/docs/source/notebooks/html
           cp -r ${{ github.workspace }}/docs/source/notebooks/html/* build/
-          cp -r build/css/* build-css
-          cp -r build/image/* build-image
+          mkdir -p build/css && cp -r build/css build-css
+          mkdir -p build/image && cp -r build/image build-image
           rm -rf build/css
           rm -rf build/image
           ls -la build
