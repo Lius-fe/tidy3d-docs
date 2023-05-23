@@ -15,7 +15,8 @@ def creat_yaml(meta, anchor={}):
     data = {
         'layout': 'default',
         'custom_css': "cobalt",
-        'custom_font': 'font2'
+        'custom_font': 'font2',
+        'source_link': meta['source_link']
     }
     if 'title' in meta:
         data['title'] = meta['title']
@@ -25,6 +26,8 @@ def creat_yaml(meta, anchor={}):
         data['tags'] = [tag.strip() for tag in meta['keywords'].split(",")]
     if 'page_title' in meta:
         data['page_title'] = meta['page_title']
+    if 'image' in meta:
+        data['image'] = meta['image']
     # 将字典转换为 YAML 格式
     anchor_str = ""
     if anchor:
@@ -133,6 +136,25 @@ def write_template(meta, file_name, create_css=False):
         with open(html_output_file, 'w') as output_file:
             output_file.write(yam_str + str(ouptut_html))
 
+def generatorOG(metadata, description):
+    feature_image = metadata.get('feature_image', '')
+    img_output_directory = f'{output_dir}/image/'
+    if feature_image:
+        image_name = os.path.basename(feature_image)
+        if not os.path.exists(img_output_directory):
+            os.makedirs(img_output_directory)
+
+        shutil.copy(feature_image, img_output_directory)
+        return {
+            "path": f'/assets/tidy3d/examples/image/{image_name}',
+            "alt": description
+        }
+
+    return None
+
+# https://docs.flexcompute.com/projects/tidy3d/en/latest/_sources/notebooks/GDS_import.ipynb.txt
+# https://docs.flexcompute.com/projects/tidy3d/en/last/_sources/notebooks/Simulation.ipynb
+
 # 获取当前目录下的所有 ipynb 文件
 ipynb_files = glob.glob("*.ipynb")
 shutil.rmtree(output_dir)
@@ -170,14 +192,18 @@ for input_file in ipynb_files:
                     description = metadata.get('description', '')
                     keywords = metadata.get('keywords', '')
                     dict = {
-                        "page_title": default_title
+                        "page_title": default_title,
+                        "source_link": f'https://docs.flexcompute.com/projects/tidy3d/en/last/_sources/notebook/{input_file}'
                     }
+                    open_graph = generatorOG(metadata, title if title else default_title)
                     if title:
                         dict['title'] = title
                     if description:
                         dict['description'] = description
                     if keywords:
                         dict['keywords'] = keywords
+                    if open_graph:
+                        dict['image'] = open_graph
                     write_template(dict, os.path.splitext(os.path.basename(input_file))[0], index == 0)
                     index += 1
 
