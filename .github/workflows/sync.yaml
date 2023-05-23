@@ -62,7 +62,8 @@ jobs:
           cache: 'pip'
       - run: cd ${{ github.workspace }}/docs && pip install beautifulsoup4 nbformat nbconvert pyyaml
       - run: cd ${{ github.workspace }}/docs/source/notebooks && mkdir html && python convert.py
-      - run: |
+      - shell: bash
+        run: |
           cd ${{ github.workspace }}
           mkdir -p build
           mkdir -p build-css
@@ -73,6 +74,7 @@ jobs:
           rm -rf build/css
           rm -rf build/image
           ls -la build
+          
       - uses: JamesIves/github-pages-deploy-action@v4
         with:
           folder: build
