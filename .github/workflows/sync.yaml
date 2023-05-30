@@ -68,7 +68,7 @@ jobs:
           mkdir -p build && rsync -r ${{ github.workspace }}/docs/source/notebooks/html/ build
           mkdir -p build/css && rsync -r build/css/ build-css
           mkdir -p build/image && rsync -r build/image/ build-image
-          mkdir -p build-source && cp docs/source/notebooks/*.ipynb /build-source
+          mkdir -p build-source && cp docs/source/notebooks/*.ipynb build-source
           rm -rf build/css
           rm -rf build/image
           ls -la build
