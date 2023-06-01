@@ -48,16 +48,8 @@ jobs:
     needs: set_env
     runs-on: ubuntu-latest
     steps:
-      - name: filter
-        id: filter
-        uses: dorny/paths-filter@v2
-        with:
-            filters: |
-                notebooks:
-                    - 'docs/source/notebooks'
       - name: Checkout
         uses: actions/checkout@v3
-
       - uses: JamesIves/github-pages-deploy-action@v4
         if: ${{ steps.filter.outputs.changes == 'notebooks' }}
         with:
