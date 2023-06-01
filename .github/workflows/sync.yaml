@@ -38,7 +38,7 @@ jobs:
         run: |
           case ${{ env.ENV }} in
             dev)
-            echo "::set-output name=branch::develop"
+            echo "::set-output name=branch::feature/examples"
             ;;
             prod)
             echo "::set-output name=branch::main"
@@ -50,9 +50,15 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+      - name: filter
+        id: filter
+        uses: dorny/paths-filter@v2
         with:
-          submodules: recursive   
+            filters: |
+                notebooks:
+                    - 'docs/source/notebooks'
       - uses: JamesIves/github-pages-deploy-action@v4
+        if: ${{ steps.filter.outputs.changes == 'notebooks' }}
         with:
           folder: docs/source/notebooks/
           token: ${{ secrets.GH_PAT }}
