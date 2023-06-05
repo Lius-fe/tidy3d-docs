@@ -1,4 +1,4 @@
-name: build&sync
+name: sync-to-proxy-repo
 on:
   push:
     branches:
@@ -56,4 +56,15 @@ jobs:
           token: ${{ secrets.GH_PAT }}
           repository-name: flexcompute/tidy3d-example-library
           target-folder: notebooks
+          branch: ${{ needs.set_env.outputs.dest-branch }}
+      - run: |
+          mkdir -p build_toc
+          cp docs/source/examples.rst build_toc/examples.rst
+        
+      - uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: build_toc
+          token: ${{ secrets.GH_PAT }}
+          repository-name: flexcompute/tidy3d-example-library
+          target-folder: toc
           branch: ${{ needs.set_env.outputs.dest-branch }}
